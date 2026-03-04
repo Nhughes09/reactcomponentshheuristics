@@ -14,7 +14,7 @@ A curated collection of **premium, production-ready React components** built wit
 - [Architecture & Design Patterns](#architecture--design-patterns)
 - [Professional React Strategies](#professional-react-strategies)
 - [Integration Guide for AI Agents](#integration-guide-for-ai-agents)
-- [Project Structure](#project-structure)
+- [Anti-Vibecode Design Playbook](#anti-vibecode-design-playbook)
 - [Dependencies](#dependencies)
 - [License](#license)
 
@@ -612,6 +612,311 @@ npm install @splinetool/react-spline @splinetool/runtime
   "tailwind-merge": "^3.x"
 }
 ```
+
+---
+
+## Anti-Vibecode Design Playbook
+
+> **The goal**: Every website you build should look like a human designer spent hours on it — not like an AI cranked it out in 30 seconds. This section is a reference for AI coding agents and developers to achieve professional results every time.
+
+### 🔤 Font Selections That Look Professional
+
+**Never use browser defaults.** The single biggest tell of vibecoded output is default system fonts. Always explicitly load fonts.
+
+#### Recommended Font Pairings
+
+| Style                  | Heading Font       | Body Font             | Vibe                         |
+| ---------------------- | ------------------ | --------------------- | ---------------------------- |
+| **Editorial/Academic** | Playfair Display   | Inter                 | Authoritative, sophisticated |
+| **Modern SaaS**        | Outfit             | Inter                 | Clean, contemporary          |
+| **Enterprise**         | DM Serif Display   | DM Sans               | Polished, corporate          |
+| **Creative Agency**    | Sora               | Plus Jakarta Sans     | Fresh, design-forward        |
+| **Startup/Tech**       | Cabinet Grotesk    | Satoshi               | Trendy, geometric            |
+| **Financial/Legal**    | Lora               | Source Sans 3         | Trustworthy, professional    |
+| **Minimal**            | Manrope            | Manrope               | Unified, Swiss-style         |
+| **Editorial Blog**     | Fraunces           | Work Sans             | Literary, warm               |
+| **Developer Tools**    | Space Grotesk      | JetBrains Mono (code) | Technical, precise           |
+| **Luxury/Fashion**     | Cormorant Garamond | Montserrat            | Elegant, high-end            |
+
+#### How to Load Fonts Properly
+
+```tsx
+// In layout.tsx — use Google Fonts CDN with preconnect
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+// On <body>
+<body style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+
+// For headings — create a reusable const
+const serif = { fontFamily: "'Playfair Display', Georgia, serif" };
+```
+
+### 📏 Typography Hierarchy Rules
+
+**The #1 sign of vibecode: every heading is the same size and weight.** Professional sites have strict hierarchy.
+
+```
+h1:  clamp(2.4rem, 5vw, 4.5rem)  — weight 700, tight tracking (-0.02em)
+h2:  clamp(1.8rem, 3.5vw, 2.6rem) — weight 700, tight tracking (-0.015em)
+h3:  1.1rem – 1.25rem              — weight 600-700
+Body: 14px – 15px                  — weight 400, line-height 1.7
+Small: 12px – 13px                 — weight 500, use for captions/labels
+Eyebrow: 10px – 12px               — weight 600, tracking 0.15em+, uppercase
+```
+
+#### The Eyebrow Pattern
+
+Instead of plain text above headings, use a styled eyebrow:
+
+```tsx
+// ❌ Vibecoded — plain colored text or worse, a pill badge
+<span className="bg-blue-100 text-blue-600 rounded-full px-3 py-1 text-sm">Section</span>
+
+// ✅ Professional — subtle uppercase tracked text
+<p className="text-[12px] font-semibold tracking-[0.18em] uppercase text-sky-500 mb-3">
+  Section Name
+</p>
+```
+
+#### Font Size: Use `clamp()` Not `text-xl`
+
+```tsx
+// ❌ Vibecoded — Tailwind size classes look generic at scale
+<h1 className="text-4xl md:text-6xl font-bold">Title</h1>
+
+// ✅ Professional — fluid sizing with clamp
+<h1 style={{ fontSize: "clamp(2.4rem, 4vw, 3.5rem)", lineHeight: 1.08, letterSpacing: "-0.02em" }}>
+  Title
+</h1>
+```
+
+### 🎨 Color Strategy
+
+**Vibecoded = pure Tailwind colors (blue-500, green-500, red-500).** Professional = curated, intentional palettes.
+
+#### Light Mode Color System
+
+```
+Background:        #ffffff (pure white with gradient shaders for depth)
+Primary text:      slate-800 (#1e293b) — NOT black
+Secondary text:    slate-500 (#64748b) — for body copy
+Tertiary text:     slate-400 (#94a3b8) — for captions, labels
+Heading accent:    blue-900 (#1e3a8a) — deep, rich blue for authority
+Primary accent:    sky-500  (#0ea5e9) — links, interactive elements
+Secondary accent:  violet-500 (#8b5cf6) — for variety, gradients
+Border:            gray-200 at 80% opacity — subtle, not harsh
+```
+
+#### Rules
+
+1. **Never use pure black text** — use `slate-800` or `slate-700`
+2. **Never use a single accent color** — pair at least 2 (e.g., sky + violet)
+3. **Gradients > flat colors** for accents: `bg-gradient-to-r from-sky-500 to-violet-500`
+4. **Use opacity** on borders and backgrounds: `border-gray-200/80`, `bg-white/80`
+5. **Background shaders** on every section for depth (see below)
+
+#### Gradient Accented Text
+
+```tsx
+// ❌ Vibecoded — plain colored text
+<span className="text-blue-500">Highlighted Word</span>
+
+// ✅ Professional — animated gradient text
+<span className="gradient-text">Highlighted Word</span>
+
+// CSS for .gradient-text:
+.gradient-text {
+  background-image: linear-gradient(135deg, #0ea5e9, #8b5cf6, #0ea5e9);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 4s ease infinite;
+}
+```
+
+### 🖼 Background Depth (Not Flat White)
+
+**Vibecoded = flat white/dark background everywhere.** Professional = layered gradient shaders that create visual depth.
+
+```tsx
+// Every section should have a subtle background shader
+<section className="relative py-24 px-6">
+  {/* Background gradient shader */}
+  <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50/40 to-white pointer-events-none" />
+
+  {/* Optional: Soft colored orb for visual interest */}
+  <div className="absolute top-0 right-0 w-[40%] h-[50%] rounded-full bg-sky-50/40 blur-[80px] pointer-events-none" />
+
+  {/* Content above the shaders */}
+  <div className="relative max-w-[1100px] mx-auto">{/* ... */}</div>
+</section>
+```
+
+Alternate the shader colors between sections for rhythm:
+
+- Section 1: `via-slate-50/40`
+- Section 2: `via-sky-50/30`
+- Section 3: `via-slate-50/40`
+- Section 4: `via-violet-50/20`
+
+### 📐 Spacing System
+
+**Vibecoded = inconsistent padding, random gaps.** Professional = rhythmic spacing.
+
+#### Section Rhythm
+
+```
+Section padding:     py-24 (96px top/bottom)
+Section header mb:   mb-14 (56px below header)
+Card gaps:           gap-3 to gap-4
+Inner card padding:  p-5 to p-6
+Content max-width:   max-w-[1100px] (narrower than default feels premium)
+```
+
+#### Don't Let Content Touch Edges
+
+```tsx
+// ❌ Vibecoded
+<div className="max-w-7xl mx-auto">...</div>
+
+// ✅ Professional — narrower, with horizontal padding
+<div className="max-w-[1100px] mx-auto px-6">...</div>
+```
+
+### 🌓 Shadow & Depth System
+
+**Vibecoded = no shadows OR heavy `shadow-lg` everywhere.** Professional = subtle, layered shadows.
+
+```tsx
+// Card at rest — subtle colored shadow
+className = "shadow-md shadow-slate-100/60";
+
+// Card on hover — elevated, deeper
+className =
+  "hover:shadow-lg hover:shadow-slate-200/60 hover:-translate-y-0.5 transition-all duration-300";
+
+// Hero card — premium shadow with very low opacity
+className = "shadow-xl shadow-black/[0.04]";
+
+// Never do this — shadow-lg with no color control looks harsh
+className = "shadow-lg"; // ❌
+```
+
+#### The 3-Layer Card Pattern
+
+```tsx
+// Glow wrapper → inner card → content
+<div className="relative rounded-2xl border border-gray-200/80 p-1.5">
+  <GlowingEffect spread={40} glow proximity={64} />
+  <div
+    className="relative rounded-xl bg-white p-6 shadow-md shadow-slate-100/60
+    hover:shadow-lg hover:shadow-slate-200/60 transition-all duration-300"
+  >
+    {/* Content */}
+  </div>
+</div>
+```
+
+### 🧩 Component Composition Patterns
+
+#### Status Indicators
+
+```tsx
+// ❌ Vibecoded — text label
+<p className="text-green-500">Active</p>
+
+// ✅ Professional — animated dot + muted text
+<div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-slate-50 px-3 py-1 text-xs text-slate-400 w-fit">
+  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+  All systems operational
+</div>
+```
+
+#### Stat Displays
+
+```tsx
+// ❌ Vibecoded — plain text with Tailwind bold
+<p className="text-2xl font-bold text-blue-500">1,962</p>
+<p className="text-sm text-gray-500">Rogers' Framework</p>
+
+// ✅ Professional — serif font, tracked label, dividers between stats
+<div className="flex items-center gap-6">
+  <div>
+    <p style={serif} className="text-2xl font-bold text-sky-600">1,962</p>
+    <p className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
+      Rogers&apos; Framework
+    </p>
+  </div>
+  <div className="w-px h-8 bg-gray-200" />
+  <div>
+    <p style={serif} className="text-2xl font-bold text-violet-600">5</p>
+    <p className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
+      Diffusion Stages
+    </p>
+  </div>
+</div>
+```
+
+#### Navigation
+
+```tsx
+// ❌ Vibecoded — default nav with harsh borders
+<nav className="bg-white border-b border-gray-300 p-4">
+
+// ✅ Professional — scroll-adaptive frosted glass
+<nav className={cn(
+  "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+  scrolled
+    ? "bg-white/90 backdrop-blur-xl border-b border-gray-200/80 shadow-sm"
+    : "bg-transparent"
+)}>
+```
+
+### 🚫 Common Vibecode Tells to Avoid
+
+| Vibecoded                           | Professional Alternative                                    |
+| ----------------------------------- | ----------------------------------------------------------- |
+| `text-black` for headings           | `text-slate-800` or custom color like `text-blue-900`       |
+| Browser default fonts               | Explicitly loaded Google Fonts pair                         |
+| `text-xl md:text-3xl` for headings  | `clamp()` with specific line-height and letter-spacing      |
+| Flat `bg-white` every section       | Alternating gradient shaders per section                    |
+| Raw Tailwind colors (`bg-blue-500`) | HSL-tuned or opacity-adjusted (`sky-500`, `violet-500/80`)  |
+| `shadow-lg` on everything           | Subtle `shadow-md shadow-slate-100/60` with colored shadows |
+| `rounded-lg` on everything          | Mix of `rounded-xl`, `rounded-2xl`, `rounded-[10px]`        |
+| Emoji (🚀 📊 ⚡) in headings        | Lucide React icons in styled containers                     |
+| `px-4 py-2` small padding           | `p-6` to `p-14` generous whitespace                         |
+| `gap-4` everywhere                  | Varied gaps: `gap-2.5`, `gap-3.5`, `gap-6`                  |
+| No scroll animations                | `useInView` + `motion` on every section                     |
+| Pill badges around section labels   | Uppercase tracked text with no container                    |
+| `max-w-7xl` (too wide)              | `max-w-[1100px]` or `max-w-5xl` (900–1100px)                |
+| Generic "Click Here" buttons        | Descriptive text + icon + hover micro-animations            |
+| Placeholder text ("Lorem ipsum")    | Real content always — data-driven from arrays               |
+| Borders with no opacity control     | `border-gray-200/80` — subtle, not harsh                    |
+
+### 📋 Pre-Ship Checklist
+
+Before considering any page "done", verify:
+
+- [ ] All headings use an explicitly loaded serif or display font
+- [ ] Body text uses a loaded sans-serif (Inter, DM Sans, etc.)
+- [ ] No browser-default fonts visible anywhere
+- [ ] Text sizes use `clamp()` or precise pixel values, not just Tailwind sizes
+- [ ] Letter-spacing is negative on large headings (tight tracking)
+- [ ] Every section has a background gradient shader (not flat white/dark)
+- [ ] All cards have subtle shadows with hover elevation
+- [ ] Scroll-triggered animations on every section
+- [ ] Max content width is 1100px or less
+- [ ] No emoji in headings or section labels
+- [ ] Nav uses `backdrop-blur` and `bg-white/90` (frosted glass)
+- [ ] Accent colors come in pairs (sky + violet, not just "blue")
+- [ ] Borders use opacity modifier (`/80`)
+- [ ] At least one interactive element (globe, glow cards, 3D scene)
+- [ ] Buttons have micro-animation on hover (translate, shadow, color shift)
 
 ---
 
